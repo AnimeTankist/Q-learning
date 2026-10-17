@@ -12,21 +12,22 @@ GOAL  = (4, 4)
 OBSTACLES = {(1, 1), (2, 2), (3, 1), (1, 3)}   # стеллажи
 
 ACTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]    # вверх, вниз, влево, вправо
+N_ACTIONS = len(ACTIONS)
 MAX_STEPS = 100
 
 def step(state, action):
     """Возвращает (next_state, reward, done)."""
-    dx, dy = ACTIONS[action]
-    x, y = state[0] + dx, state[1] + dy
+    dr, dc = ACTIONS[action]
+    r, c = state[0] + dr, state[1] + dc
 
     # упёрлись в границу — стоим, штраф
-    if not (0 <= x < GRID and 0 <= y < GRID):
+    if not (0 <= r < GRID and 0 <= c < GRID):
         return state, -5, False
     # упёрлись в препятствие — стоим, штраф
-    if (x, y) in OBSTACLES:
+    if (r, c) in OBSTACLES:
         return state, -5, False
 
-    new_state = (x, y)
+    new_state = (r, c)
     if new_state == GOAL:
         return new_state, +100, True
     return new_state, -1, False
@@ -42,7 +43,7 @@ EPSILON_DECAY = 0.995
 EPISODES      = 1000
 
 # Q-таблица: для каждого состояния — вектор из 4 значений
-Q = defaultdict(lambda: np.zeros(4))
+Q = defaultdict(lambda: np.zeros(N_ACTIONS))
 
 rewards_per_episode = []
 
@@ -56,7 +57,7 @@ for episode in range(EPISODES):
     for t in range(MAX_STEPS):
         # ε-greedy выбор действия
         if random.random() < EPSILON:
-            action = random.randint(0, 3)       # исследование
+            action = random.randint(0, N_ACTIONS - 1)       # исследование
         else:
             action = int(np.argmax(Q[state]))               # использование
 
