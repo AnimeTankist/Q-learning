@@ -12,7 +12,6 @@ GOAL  = (4, 4)
 OBSTACLES = {(1, 1), (2, 2), (3, 1), (1, 3)}   # стеллажи
 
 ACTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]    # вверх, вниз, влево, вправо
-N_ACTIONS = len(ACTIONS)
 MAX_STEPS = 100
 
 def step(state, action):
@@ -43,7 +42,7 @@ EPSILON_DECAY = 0.995
 EPISODES      = 1000
 
 # Q-таблица: для каждого состояния — вектор из 4 значений
-Q = defaultdict(lambda: np.zeros(N_ACTIONS))
+Q = defaultdict(lambda: np.zeros(4))
 
 rewards_per_episode = []
 
@@ -57,7 +56,7 @@ for episode in range(EPISODES):
     for t in range(MAX_STEPS):
         # ε-greedy выбор действия
         if random.random() < EPSILON:
-            action = random.randint(0, N_ACTIONS - 1)       # исследование
+            action = random.randint(0, 3)       # исследование
         else:
             action = int(np.argmax(Q[state]))               # использование
 
