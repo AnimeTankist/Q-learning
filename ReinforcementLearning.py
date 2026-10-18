@@ -116,7 +116,7 @@ ax.add_patch(plt.Rectangle((START[1] - 0.5, START[0] - 0.5), 1, 1, color='blue',
 arrow = {0: (0, 0.3), 1: (0, -0.3), 2: (-0.3, 0), 3: (0.3, 0)}
 for r in range(GRID):
     for c in range(GRID):
-        if (r, c) in OBSTACLES:
+        if (r, c) in OBSTACLES or (r, c) == GOAL:
             continue
         a = int(np.argmax(Q[(r, c)]))
         dx, dy = arrow[a]
